@@ -63,6 +63,7 @@ body {
  }
  a {
    text-decoration:none;
+   color: inherit;
  }
 `;
 // 글로벌 스타일에도 props를 통해 theme에 접근가능하다.
