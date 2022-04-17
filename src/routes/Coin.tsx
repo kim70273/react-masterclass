@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -31,22 +31,89 @@ interface RouterState {
   };
 }
 
+// 콘솔창에서 Store Object... 로 만들어준 객체 변수에
+// Object.keys(temp1).join() 으로 키값들을 가져온다.
+
+// 그리고 Object.values(temp1).map(v => typeof v).join() 을 통해서 키들의 타입을 가져온다.
+interface InfoData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+  description: string;
+  message: string;
+  open_source: boolean;
+  started_at: string;
+  development_status: string;
+  hardware_wallet: boolean;
+  proof_type: string;
+  org_structure: string;
+  hash_algorithm: string;
+  first_data_at: string;
+  last_data_at: string;
+}
+
+interface PriceData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  circulating_supply: number;
+  total_supply: number;
+  max_supply: number;
+  beta_value: number;
+  first_data_at: string;
+  last_updated: string;
+  quotes: {
+    USD: {
+      ath_date: string;
+      ath_price: number;
+      market_cap: number;
+      market_cap_change_24h: number;
+      percent_change_1h: number;
+      percent_change_1y: number;
+      percent_change_6h: number;
+      percent_change_7d: number;
+      percent_change_12h: number;
+      percent_change_15m: number;
+      percent_change_24h: number;
+      percent_change_30d: number;
+      percent_change_30m: number;
+      percent_from_price_ath: number;
+      price: number;
+      volume_24h: number;
+      volume_24h_change_24h: number;
+    };
+  };
+}
+
 const Coin = () => {
   const [loading, setLoading] = useState(true);
-  const params = useParams();
   const { coinId } = useParams<{ coinId: string }>();
-
-  // Link의 state로 보내준 정보를 받는 hook.
-  //   const location = useLocation();
-  //   console.log(location);
-
-  // 받은 state를 이용해서 사용하기때문에
-  // API가 줄때까지 기다릴 필요가 없어진다.
-
-  // 하지만 이것의 정보를 받으려면 Home화면이 먼저 열려야한다.
   const { state } = useLocation() as RouterState;
+  const [info, setInfo] = useState<InfoData>();
+  const [priceInfo, setPriceInfo] = useState<PriceData>();
 
-  // Link에 state를 통해 정보를 보내고 얻는 부분 하면 됨.
+  useEffect(() => {
+    // 나중에 데이터 받아오는 부분은 react-query를 이용해서 더 이쁘게 만들 수 있다.
+    (async () => {
+      const infoData = await (
+        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+      ).json();
+      const priceData = await (
+        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+      ).json();
+      // 타입스크립트에게 어떤 객체인지 먼저 설명을 해줘야 하는데, 어떤경우에는 API의 타입에 대한
+      // 정보를 자동 생성하는 방법도 있긴하다.
+      setInfo(infoData);
+      setPriceInfo(priceData);
+      setLoading(false);
+    })();
+  }, []);
+
   return (
     <Container>
       <Header>{state?.name || "Loading.."}</Header>
