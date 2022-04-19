@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useParams } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useParams,
+  Link,
+  useMatch,
+} from "react-router-dom";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -48,6 +55,28 @@ const Description = styled.p`
 const Loader = styled.span`
   text-align: center;
   display: block;
+`;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
 `;
 
 interface RouterState {
@@ -121,6 +150,10 @@ const Coin = () => {
   const { state } = useLocation() as RouterState;
   const [info, setInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
+  //  useMatch는 특정 url에 있는지를 알려준다.
+  // 해당하는 url에 지금 있다면 그것에 대한 정보를 가진 객체를 반환한다.
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("/:coinId/chart");
 
   useEffect(() => {
     // 나중에 데이터 받아오는 부분은 react-query를 이용해서 더 이쁘게 만들 수 있다.
@@ -175,6 +208,14 @@ const Coin = () => {
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
+          <Tabs>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
           <Routes>
             <Route path={`price`} element={<Price />} />
             <Route path={`chart`} element={<Chart />} />
