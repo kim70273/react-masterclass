@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -54,7 +56,7 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -64,35 +66,34 @@ interface CoinInterface {
   type: string;
 }
 
-// 스타일 컴포넌트를 통해 만든것은 스타일컴포넌트 이름을 보면
-// 어떤 역할인지 알기 편하다.
-
-// 리액트 라우터에서 쓰는 Link는 결국 a로 바뀜. 따라서 선택자에 a를 적어 준것.
 const Coins = () => {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
+  // react query를 이용해서 아래의 긴 코드를 한줄로 만들었다.
+  // useQuery의 첫번째 파라미터로는 키가 필요하고 두번째 파라미터로는 fetcher 함수가 필요하다.
 
-  useEffect(() => {
-    // (() => ...)(); 이렇게 만든 함수는 즉시 실행까지 된다.
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await response.json();
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
+  // 리액트 쿼리가 데이터를 캐시에 저장해두기때문에 코인을 클릭하고 뒤로가기를 클릭시에 로딩이 표사되지 않게 된다.
 
-  console.log(coins);
+  //   const [coins, setCoins] = useState<CoinInterface[]>([]);
+  //   const [loading, setLoading] = useState(true);
+  //   useEffect(() => {
+  //     (async () => {
+  //       const response = await fetch("https://api.coinpaprika.com/v1/coins");
+  //       const json = await response.json();
+  //       setCoins(json.slice(0, 100));
+  //       setLoading(false);
+  //     })();
+  //   }, []);
+
   return (
     <Container>
       <Header>
         <Title>코인</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>로딩 중...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               {/*원한다면 link를 통해서 다른화면에 정보를 보내줄 수도 있다. */}
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
