@@ -68,21 +68,6 @@ interface ICoin {
 
 const Coins = () => {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
-  // react query를 이용해서 아래의 긴 코드를 한줄로 만들었다.
-  // useQuery의 첫번째 파라미터로는 키가 필요하고 두번째 파라미터로는 fetcher 함수가 필요하다.
-
-  // 리액트 쿼리가 데이터를 캐시에 저장해두기때문에 코인을 클릭하고 뒤로가기를 클릭시에 로딩이 표사되지 않게 된다.
-
-  //   const [coins, setCoins] = useState<CoinInterface[]>([]);
-  //   const [loading, setLoading] = useState(true);
-  //   useEffect(() => {
-  //     (async () => {
-  //       const response = await fetch("https://api.coinpaprika.com/v1/coins");
-  //       const json = await response.json();
-  //       setCoins(json.slice(0, 100));
-  //       setLoading(false);
-  //     })();
-  //   }, []);
 
   return (
     <Container>

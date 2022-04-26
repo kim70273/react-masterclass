@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import Router from "./Router";
+import { ReactQueryDevtools } from "react-query/devtools";
+// ReactQueryDevtools 컴포넌트를 사용해서 캐싱된 쿼리를 볼 수 있다.
 
 // 이것은 랜더링 될때 전역에 css를 적용해준다.
 // (하나의 컴포넌트에 고립된 스타일이 아님.)
@@ -72,6 +74,7 @@ function App() {
     <>
       <GlobalStyle />
       <Router />
+      <ReactQueryDevtools initialIsOpen={true} />
     </>
   );
 }
