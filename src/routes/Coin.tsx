@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -169,6 +170,11 @@ const Coin = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
       </Header>

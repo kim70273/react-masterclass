@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { HelmetProvider } from "react-helmet-async";
 // ReactQueryDevtools 컴포넌트를 사용해서 캐싱된 쿼리를 볼 수 있다.
 
 // 이것은 랜더링 될때 전역에 css를 적용해준다.
@@ -72,9 +73,11 @@ body {
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <HelmetProvider>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </HelmetProvider>
     </>
   );
 }
