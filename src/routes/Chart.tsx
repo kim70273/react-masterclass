@@ -19,8 +19,12 @@ interface IHistorical {
 }
 
 const Chart = ({ coinId }: ChartProps) => {
-  const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
-    fetchCoinHistory(coinId)
+  const { isLoading, data } = useQuery<IHistorical[]>(
+    ["ohlcv", coinId],
+    () => fetchCoinHistory(coinId),
+    {
+      refetchInterval: 10000,
+    }
   );
 
   // 차트에 왼쪽에 숫자를 없애고, 밑에숫자는 날짜가 나오도록 수정하기
