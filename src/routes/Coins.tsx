@@ -5,6 +5,12 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
 
+/*
+1. 뒤로 가기 버튼 생성
+2. chart 부분을 주식 차트 처럼 변경
+3. price 버튼 부분도 완성
+*/
+
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;

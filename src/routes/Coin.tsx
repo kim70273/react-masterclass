@@ -13,6 +13,8 @@ import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet-async";
+import backBtnIma from "../img/backBtn.png";
+import homeIma from "../img/homeIcon.png";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -23,11 +25,20 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 `;
 
-const Title = styled.h1`
+const MenuBtn = styled.div`
+  cursor: pointer;
+  min-width: 50px;
+  display: flex;
+  img {
+  }
+`;
+
+const Title = styled.div`
+  margin: 0 auto;
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
 `;
@@ -166,6 +177,14 @@ const Coin = () => {
     }
   );
 
+  const backBtnClickHandle = () => {
+    window.history.back();
+  };
+
+  const homeBtnClickHandle = () => {
+    window.location.href = "/";
+  };
+
   const loading = infoLoading || tickersLoading;
 
   return (
@@ -176,7 +195,15 @@ const Coin = () => {
         </title>
       </Helmet>
       <Header>
-        {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        <MenuBtn onClick={backBtnClickHandle}>
+          <img src={backBtnIma} />
+        </MenuBtn>
+        <Title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </Title>
+        <MenuBtn onClick={homeBtnClickHandle}>
+          <img src={homeIma} />
+        </MenuBtn>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
