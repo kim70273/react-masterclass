@@ -3,17 +3,14 @@ import Coin from "./routes/Coin";
 import Coins from "./routes/Coins";
 //react-router-dom의 버전 6부터는 @types/react-router-dom를 설치 하지 않아도 됨.
 
-interface IRouterProps {
-  toggleDark: () => void;
-  isDark: boolean;
-}
+interface IRouterProps {}
 
-const Router = ({ toggleDark, isDark }: IRouterProps) => {
+const Router = ({}: IRouterProps) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/:coinId/*" element={<Coin isDark={isDark} />} />
-        <Route path="/" element={<Coins toggleDark={toggleDark} />} />
+        <Route path="/:coinId/*" element={<Coin />} />
+        <Route path="/" element={<Coins />} />
       </Routes>
     </BrowserRouter>
   );

@@ -6,6 +6,8 @@ import { HelmetProvider } from "react-helmet-async";
 // ReactQueryDevtools 컴포넌트를 사용해서 캐싱된 쿼리를 볼 수 있다.
 import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 // 이것은 랜더링 될때 전역에 css를 적용해준다.
 // (하나의 컴포넌트에 고립된 스타일이 아님.)
@@ -73,14 +75,13 @@ body {
 `;
 // 글로벌 스타일에도 props를 통해 theme에 접근가능하다.
 function App() {
-  const [isDark, setIsDark] = useState(false);
-  const toggleDark = () => setIsDark((current) => !current);
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <HelmetProvider>
           <GlobalStyle />
-          <Router toggleDark={toggleDark} isDark={isDark} />
+          <Router />
           <ReactQueryDevtools initialIsOpen={true} />
         </HelmetProvider>
       </ThemeProvider>
