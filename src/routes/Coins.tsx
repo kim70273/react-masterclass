@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
 
 /*
 1. 뒤로 가기 버튼 생성
@@ -76,6 +78,9 @@ interface ICoin {
 interface ICoinsProps {}
 
 const Coins = ({}: ICoinsProps) => {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  // recoil에서 상태를 set해주는 함수를 받아온다.
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
 
   return (
@@ -85,6 +90,7 @@ const Coins = ({}: ICoinsProps) => {
       </Helmet>
       <Header>
         <Title>코인</Title>
+        <button onClick={toggleDarkAtom}>Toggle Mode</button>
       </Header>
       {isLoading ? (
         <Loader>로딩 중...</Loader>
